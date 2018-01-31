@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <h3>TextBox with autocomplete suggestions</h3>
+    <input id="txt" list="dataList" />
+    <datalist id="dataList"></datalist>
+</body>
+<script type="text/javascript">
+    function getSuggestions(prefix) {
+        const result = Array
+          .from(new Array(10), function (x, i) {
+              return i;
+          })
+          .map(function (x) {
+              return prefix + '_mock_' + x;
+          });
+        const delay = Math.random() * 800 + 200; // delay 200~1000ms
+        return new Promise(function (resolve, reject) {
+            setTimeout(resolve, delay, result);
+        });
+    }
+    let txt = document.getElementById('txt');
+    let dataList = document.getElementById('dataList');
+    txt.addEventListener('input', function () {
+        getSuggestions(txt.value).then(function (val) {
+            dataList.innerHTML = null;
+            val.forEach(function (obj) {
+                var option = document.createElement("OPTION");
+                option.value = obj;
+                dataList.appendChild(option);
+            });
+        });
+    });
+</script>
+</html>
